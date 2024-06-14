@@ -1,7 +1,21 @@
 const User = require("../models").User;
 const bcrypt = require("bcrypt");
-const { raw } = require("express");
 const jwt = require("jsonwebtoken");
+const appConfig = require("../config/app");
+
+exports.register = async (req, res) => {
+  try {
+    //create user
+    const user = await User.create(req.body);
+
+    //generate auth token
+    const userWithToken = generateToken(user.get({ raw: true }));
+
+    res.send(userWithToken);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -28,15 +42,13 @@ exports.login = async (req, res) => {
     const userWithToken = generateToken(user.get({ raw: true }));
 
     res.send(userWithToken);
-  } catch (error) {}
-};
-
-exports.register = async (req, res) => {
-  res.send("Register");
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const generateToken = (user) => {
   delete user.password;
-  const token = jwt.sign(user, "secret", { expiresIn: 604800 });
+  const token = jwt.sign(user, appConfig.appKey, { expiresIn: 604800 });
   return { ...user, token };
 };
