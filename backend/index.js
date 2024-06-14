@@ -1,15 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const appConfig = require("./config/app");
+const router = require("./router/index");
 
 const app = express();
-const port = appConfig.appPort;
 
+app.use(express.json());
 app.use(cors());
+app.use(router);
 
-app.get("/", async (req, res) => {
-  res.send("Hello World!");
-});
+const port = appConfig.appPort;
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
