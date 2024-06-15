@@ -38,6 +38,7 @@ const Register = () => {
                   onChange={(e) => setFirstName(e.target.value)}
                   type="text"
                   required
+                  value={firstName}
                   placeholder="First Name"
                 />
               </div>
@@ -45,6 +46,7 @@ const Register = () => {
                 <input
                   onChange={(e) => setLastName(e.target.value)}
                   type="text"
+                  value={lastName}
                   placeholder="Last Name"
                 />
               </div>
@@ -52,6 +54,7 @@ const Register = () => {
                 <select
                   name=""
                   id=""
+                  value={gender}
                   onChange={(e) => setGender(e.target.value)}
                 >
                   <option value="male">Male</option>
