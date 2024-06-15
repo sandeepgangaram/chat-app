@@ -25,7 +25,7 @@ const authServices = {
   },
   logout: () => {
     try {
-      //do nothing
+      API.defaults.headers["Authorization"] = "";
     } catch (e) {
       console.log("Auth service error", e);
       throw new Error(e.message);
