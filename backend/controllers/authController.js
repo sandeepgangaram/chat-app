@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
 
     //generate auth token
     const userWithToken = generateToken(user.get({ raw: true }));
-    userWithToken.avatar = user.avatar;
+    userWithToken.user.avatar = user.avatar;
 
     res.send(userWithToken);
   } catch (error) {
@@ -50,5 +50,5 @@ exports.login = async (req, res) => {
 const generateToken = (user) => {
   delete user.password;
   const token = jwt.sign(user, appConfig.appKey, { expiresIn: 604800 });
-  return { ...user, token };
+  return { user: { ...user }, token };
 };
