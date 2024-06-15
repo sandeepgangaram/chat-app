@@ -23,7 +23,14 @@ const authServices = {
         throw new Error(e.message);
       });
   },
-  logout: () => {},
+  logout: () => {
+    try {
+      //do nothing
+    } catch (e) {
+      console.log("Auth service error", e);
+      throw new Error(e.message);
+    }
+  },
 };
 
 export default authServices;
