@@ -10,7 +10,6 @@ exports.register = async (req, res) => {
 
     //generate auth token
     const userWithToken = generateToken(user.get({ raw: true }));
-
     res.send(userWithToken);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -40,6 +39,7 @@ exports.login = async (req, res) => {
 
     //generate auth token
     const userWithToken = generateToken(user.get({ raw: true }));
+    userWithToken.avatar = user.avatar;
 
     res.send(userWithToken);
   } catch (error) {
