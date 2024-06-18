@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Navbar.scss";
 import { logout } from "../../../store/actions/auth";
 import Modal from "../../Modal/Modal";
+import { updateProfile } from "../../../store/actions/auth";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const Navbar = () => {
   const [email, setEmail] = useState(user.email);
   const [avatar, setAvatar] = useState("");
 
-  const onSumbit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
     const form = { firstName, lastName, gender, email, avatar };
@@ -28,8 +29,9 @@ const Navbar = () => {
     for (let key in form) {
       formData.append(key, form[key]);
     }
-    // dispatch(
-    // );
+    dispatch(updateProfile(formData)).then(() => {
+      setShowProfileModal(false);
+    });
   };
   return (
     <div id="navbar">
@@ -56,7 +58,7 @@ const Navbar = () => {
               <h3 className="m-0">Update profile</h3>
             </Fragment>
             <Fragment key="body">
-              <form onSubmit={onSumbit}>
+              <form onSubmit={onSubmit}>
                 <div className="input-field">
                   <input
                     onChange={(e) => setFirstName(e.target.value)}
@@ -103,7 +105,9 @@ const Navbar = () => {
               </form>
             </Fragment>
             <Fragment key="footer">
-              <button className="btn-success">UPDATE</button>
+              <button className="btn-success" onClick={onSubmit}>
+                UPDATE
+              </button>
             </Fragment>
           </Modal>
         )}

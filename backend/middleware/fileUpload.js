@@ -46,12 +46,15 @@ exports.userFile = ((req, res, next) => {
               throw error;
             } else {
               for (const file of files) {
+                console.log(file, dest);
                 fs.unlink(path.join(dest, file), (error) => {
                   if (error) {
                     throw error;
                   }
                 });
               }
+
+              return cb(null, dest);
             }
           });
         }

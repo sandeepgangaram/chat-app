@@ -33,6 +33,21 @@ const authServices = {
       throw new Error(e.message);
     }
   },
+
+  updateProfile: (data) => {
+    const headers = {
+      headers: ["Content-Type", "application/x-www-form-urlencoded"],
+    };
+    return API.put("/users/update", data, headers)
+      .then(({ data }) => {
+        localStorage.setItem("user", JSON.stringify(data));
+        return data;
+      })
+      .catch((e) => {
+        console.log("Auth service error", e);
+        throw new Error(e.message);
+      });
+  },
 };
 
 const setHeadersAndStorage = ({ user, token }) => {
