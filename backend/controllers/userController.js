@@ -1,13 +1,20 @@
 const User = require("../models").User;
-const sequelize = require("sequelize");
 
 exports.update = async (req, res) => {
+  if (req.file) {
+    req.body.avatar = req.file.filename;
+  }
+
+  if (req.body.avatar == null || req.body.avatar.length === 0) {
+    delete req.body.avatar;
+  }
+
   try {
     const [rows, result] = await User.update(req.body, {
       where: {
         id: req.user.id,
       },
-      returining: true,
+      returning: true,
       individualHooks: true,
     });
 
@@ -17,6 +24,7 @@ exports.update = async (req, res) => {
 
     res.send(user);
   } catch (error) {
-    res.status(500).json({ error });
+    console.log(error);
+    res.status(500).json({ error: error.message });
   }
 };
