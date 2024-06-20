@@ -1,0 +1,50 @@
+@import "../../assets/scss/variables";
+
+.friend-list {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  cursor: pointer;
+  flex-direction: column;
+  min-width: fit-content;
+
+  @media (min-width: 800px) {
+    flex-direction: row;
+  }
+
+  & > div {
+    display: flex;
+
+    img {
+      display: flex;
+      align-self: center;
+      margin-right: 5px;
+    }
+
+    .friend-info {
+      display: flex;
+      align-self: center;
+      flex-direction: column;
+    }
+  }
+
+  .friend-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .online-status {
+    display: inline-block;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+  }
+
+  .online {
+    background-color: $success;
+  }
+
+  .offline {
+    background-color: $danger;
+  }
+}
