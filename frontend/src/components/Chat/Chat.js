@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Navbar from "./Navbar/Navbar";
-import FriendList from "../FriendList/FriendList";
-import Messenger from "../Messenger/Messenger";
+import Navbar from "./components/Navbar/Navbar";
+import FriendList from "./components/FriendList/FriendList";
+import Messenger from "./components/Messenger/Messenger";
 import "./Chat.scss";
 import { fetchChats } from "../../store/actions/chat";
 

@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Navbar.scss";
-import { logout } from "../../../store/actions/auth";
-import Modal from "../../Modal/Modal";
-import { updateProfile } from "../../../store/actions/auth";
+import { logout } from "../../../../store/actions/auth";
+import Modal from "../../../Modal/Modal";
+import { updateProfile } from "../../../../store/actions/auth";
 
 const Navbar = () => {
   const dispatch = useDispatch();

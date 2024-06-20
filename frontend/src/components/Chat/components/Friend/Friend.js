@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import "./Friend.scss";
-import { userStatus } from "../../utils/helpers";
+import { userStatus } from "../../../../utils/helpers";
+import "./Friend.scss";
 
 const Friend = ({ chat, click }) => {
   const currentChat = useSelector((state) => state.chatReducer.currentChat);
