@@ -34,7 +34,7 @@ exports.index = async (req, res) => {
     ],
   });
 
-  return res.json(user);
+  return res.json(user.Chats);
 };
 
 exports.create = async (req, res) => {
