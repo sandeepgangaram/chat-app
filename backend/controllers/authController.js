@@ -10,9 +10,9 @@ exports.register = async (req, res) => {
 
     //generate auth token
     const userWithToken = generateToken(user.get({ raw: true }));
-    res.send(userWithToken);
+    return res.send(userWithToken);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -29,21 +29,21 @@ exports.login = async (req, res) => {
 
     //send error if user not found
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     //send 401 if password dont match
     if (!bcrypt.compareSync(password, user.password)) {
-      res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     //generate auth token
     const userWithToken = generateToken(user.get({ raw: true }));
     userWithToken.user.avatar = user.avatar;
 
-    res.send(userWithToken);
+    return res.send(userWithToken);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

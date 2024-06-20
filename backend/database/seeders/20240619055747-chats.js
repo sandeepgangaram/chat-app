@@ -1,5 +1,6 @@
 "use strict";
 
+const { where } = require("sequelize");
 const models = require("../../models");
 
 const User = models.User;
@@ -20,18 +21,28 @@ module.exports = {
      * }], {});
      */
 
-    const users = await User.findAll({ limit: 2 });
+    // const user1 = await User.find({
+    //   where: {
+    //     id: 14,
+    //   },
+    // });
+
+    // const user2 = await User.find({
+    //   where: {
+    //     id: 23,
+    //   },
+    // });
 
     const chat = await Chat.create();
 
     await ChatUser.bulkCreate([
       {
         chatId: chat.id,
-        userId: users[0].id,
+        userId: 13,
       },
       {
         chatId: chat.id,
-        userId: users[1].id,
+        userId: 23,
       },
     ]);
 
@@ -39,17 +50,17 @@ module.exports = {
       {
         message: "Hey Bro",
         chatId: chat.id,
-        fromUserId: users[0].id,
+        fromUserId: 13,
       },
       {
         message: "Hey Buddy",
         chatId: chat.id,
-        fromUserId: users[1].id,
+        fromUserId: 23,
       },
       {
         message: "Hew are you doing?",
         chatId: chat.id,
-        fromUserId: users[1].id,
+        fromUserId: 23,
       },
     ]);
   },
