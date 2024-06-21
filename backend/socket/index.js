@@ -1,11 +1,17 @@
 const socketIo = require("socket.io");
 
 const SocketServer = (server) => {
-  const io = socketIo(server);
+  const io = socketIo(server, {
+    cors: {
+      origin: ["http://localhost:3000"],
+    },
+  });
 
   io.on("connection", (socket) => {
-    socket.io("join", async (user) => {
+    socket.on("join", async (user) => {
       console.log("New user joined: ", user.firstName);
+
+      io.to(socket.id).emit("typing", "User typing...");
     });
   });
 };

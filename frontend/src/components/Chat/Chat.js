@@ -1,14 +1,17 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./components/Navbar/Navbar";
 import FriendList from "./components/FriendList/FriendList";
 import Messenger from "./components/Messenger/Messenger";
 import "./Chat.scss";
 import { fetchChats } from "../../store/actions/chat";
+import useSocket from "./hooks/socketConnect";
 
 const Chat = () => {
   const dispatch = useDispatch();
-  // const user = useSelector((state) => state.authReducer.user);
+  const user = useSelector((state) => state.authReducer.user);
+
+  useSocket(user, dispatch);
 
   useEffect(() => {
     dispatch(fetchChats())
