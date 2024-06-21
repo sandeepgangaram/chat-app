@@ -4,8 +4,8 @@ import Navbar from "./components/Navbar/Navbar";
 import FriendList from "./components/FriendList/FriendList";
 import Messenger from "./components/Messenger/Messenger";
 import "./Chat.scss";
-import { fetchChats } from "../../store/actions/chat";
 import useSocket from "./hooks/socketConnect";
+import { fetchChats } from "../../store/actions/chat";
 
 const Chat = () => {
   const dispatch = useDispatch();
