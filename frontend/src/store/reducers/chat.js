@@ -1,5 +1,6 @@
 import {
   FETCH_CHATS,
+  PAGINATE_MESSAGS,
   RECEIVED_MESSAGE,
   SENDER_TYPING,
   SET_CURRENT_CHAT,
@@ -186,6 +187,38 @@ const chatReducer = (state = initialState, action) => {
         ...state,
         senderTyping: payload,
         scrollBottom: scrollBottomCopy,
+      };
+    }
+
+    case PAGINATE_MESSAGS: {
+      const { messages, id, pagination } = payload;
+
+      let currentChatCopy = { ...state.currentChat };
+
+      const chatCopy = state.chats.map((chat) => {
+        if (chat.id === id) {
+          const shiftedMessages = [...messages, ...chat.Messages];
+
+          currentChatCopy = {
+            ...currentChatCopy,
+            Messages: shiftedMessages,
+            Pagination: pagination,
+          };
+
+          return {
+            ...chat,
+            Messages: shiftedMessages,
+            Pagination: pagination,
+          };
+        }
+
+        return chat;
+      });
+
+      return {
+        ...state,
+        chats: chatCopy,
+        currentChat: currentChatCopy,
       };
     }
     default:

@@ -128,7 +128,7 @@ exports.messages = async (req, res) => {
 
   const messages = await Message.findAndCountAll({
     where: {
-      chatId: req.query.chatId,
+      chatId: req.query.id,
     },
     include: [
       {
@@ -137,6 +137,7 @@ exports.messages = async (req, res) => {
     ],
     limit,
     offset,
+    order: [["id", "DESC"]],
   });
 
   const totalPages = Math.ceil(messages.count / limit);
