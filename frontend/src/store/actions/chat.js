@@ -6,6 +6,7 @@ export const SET_FRIENDS_ONLINE = "set_friends_online";
 export const SET_FRIEND_ONLINE = "set_friend_online";
 export const SET_FRIEND_OFFLINE = "set_friend_offline";
 export const SET_SOCKET = "set_socket";
+export const RECEIVED_MESSAGE = "received_message";
 
 export const fetchChats = () => (dispatch) => {
   return chatService
@@ -44,4 +45,8 @@ export const setFriendOffline = (friend) => (dispatch) => {
 
 export const setSocket = (socket) => (dispatch) => {
   dispatch({ type: SET_SOCKET, payload: socket });
+};
+
+export const receivedMessage = (message, userId) => (dispatch) => {
+  dispatch({ type: RECEIVED_MESSAGE, payload: { message, userId } });
 };

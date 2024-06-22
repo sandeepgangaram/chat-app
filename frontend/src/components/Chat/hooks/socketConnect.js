@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { io } from "socket.io-client";
 import {
   fetchChats,
+  receivedMessage,
   setFriendOffline,
   setFriendOnline,
   setFriendsOnline,
@@ -35,6 +36,11 @@ function useSocket(user, dispatch) {
         socket.on("offline", (friend) => {
           dispatch(setFriendOffline(friend));
           console.log("offline", friend);
+        });
+
+        socket.on("received", (message) => {
+          dispatch(receivedMessage(message, user.id));
+          console.log("received", message);
         });
 
         console.log(res);
