@@ -9,6 +9,7 @@ export const SET_SOCKET = "set_socket";
 export const RECEIVED_MESSAGE = "received_message";
 export const SENDER_TYPING = "sender_typing";
 export const PAGINATE_MESSAGS = "paginate_messages";
+export const INCREMENT_SCROLL = "increment_scroll";
 
 export const fetchChats = () => (dispatch) => {
   return chatService
@@ -72,4 +73,8 @@ export const paginateMessages = (id, page) => (dispatch) => {
     .catch((err) => {
       throw err;
     });
+};
+
+export const incrementScroll = () => (dispatch) => {
+  dispatch({ type: INCREMENT_SCROLL });
 };

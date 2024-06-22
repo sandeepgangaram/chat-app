@@ -1,5 +1,6 @@
 import {
   FETCH_CHATS,
+  INCREMENT_SCROLL,
   PAGINATE_MESSAGS,
   RECEIVED_MESSAGE,
   SENDER_TYPING,
@@ -221,6 +222,13 @@ const chatReducer = (state = initialState, action) => {
         currentChat: currentChatCopy,
       };
     }
+
+    case INCREMENT_SCROLL:
+      return {
+        ...state,
+        scrollBottom: state.scrollBottom + 1,
+        newMessage: { chatId: null, seen: true },
+      };
     default:
       return state;
   }

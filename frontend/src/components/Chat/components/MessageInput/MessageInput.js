@@ -1,21 +1,26 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import EmojiPicker from "emoji-picker-react";
 
 import "./MessageInput.scss";
 import chatServices from "../../../../services/chatService";
+import { incrementScroll } from "../../../../store/actions/chat";
 
 const MessageInput = ({ chat }) => {
   const [message, setMessage] = useState("");
   const [image, setImage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showMessageNotification, setShowMessageNotification] = useState(false);
 
   const fileUploadRef = useRef();
   const messageInputRef = useRef();
 
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.authReducer.user);
   const socket = useSelector((state) => state.chatReducer.socket);
+  const newMessage = useSelector((state) => state.chatReducer.newMessage);
 
   const handleMessage = (e) => {
     const value = e.target.value;
@@ -91,10 +96,35 @@ const MessageInput = ({ chat }) => {
     messageInputRef.current.focus();
     messageInputRef.current.endPostion = endPostion + emojiLength;
   };
+
+  useEffect(() => {
+    if (!newMessage.seen && newMessage.chatId === chat.id) {
+      const msgBox = document.getElementById("msg-box");
+      if (msgBox.scrollTop > msgBox.scrollHeight * 0.3) {
+        dispatch(incrementScroll());
+      } else {
+        setShowMessageNotification(true);
+      }
+    } else {
+      setShowMessageNotification(false);
+    }
+  }, [newMessage, dispatch]);
+
+  const showNewMessage = () => {
+    dispatch(incrementScroll());
+    setShowMessageNotification(false);
+  };
   return (
     <div id="input-container">
       <div id="image-upload-container">
-        <div></div>
+        <div>
+          {showMessageNotification ? (
+            <div id="message-notification" onClick={showNewMessage}>
+              <FontAwesomeIcon icon="bell" className="fa-icon" />
+              <p className="m-0">new message</p>
+            </div>
+          ) : null}
+        </div>
         <div id="image-upload">
           {image.name ? (
             <div id="image-details">
