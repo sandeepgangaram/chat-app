@@ -46,7 +46,6 @@ exports.userFile = ((req, res, next) => {
               throw error;
             } else {
               for (const file of files) {
-                console.log(file, dest);
                 fs.unlink(path.join(dest, file), (error) => {
                   if (error) {
                     throw error;
@@ -69,7 +68,7 @@ exports.userFile = ((req, res, next) => {
 exports.chatFile = ((req, res, next) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      const { id } = req.user;
+      const { id } = req.body;
       const dest = `uploads/chat/${id}`;
 
       fs.access(dest, (error) => {

@@ -35,7 +35,7 @@ const MessageInput = ({ chat }) => {
       fromUser: user,
       toUserId: chat.Users.map((user) => user.id),
       chatId: chat.id,
-      message: imageUpload ? "" : message,
+      message: imageUpload ? imageUpload : message,
     };
 
     setMessage("");
@@ -52,8 +52,8 @@ const MessageInput = ({ chat }) => {
 
     chatServices
       .uploadChatImage(formData)
-      .then((res) => {
-        sendMessage(image);
+      .then((imageUrl) => {
+        sendMessage(imageUrl);
       })
       .catch((e) => console.log(e));
   };

@@ -42,8 +42,6 @@ function useSocket(user, dispatch) {
           dispatch(receivedMessage(message, user.id));
           console.log("received", message);
         });
-
-        console.log(res);
       })
       .catch((e) => console.log(e));
   }, [dispatch, user]);
