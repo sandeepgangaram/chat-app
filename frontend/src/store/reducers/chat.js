@@ -26,6 +26,8 @@ const chatReducer = (state = initialState, action) => {
         chats: payload,
       };
     case SET_CURRENT_CHAT:
+      //sort messages
+      payload.Messages = payload.Messages.sort((a, b) => a.id - b.id);
       return {
         ...state,
         currentChat: payload,
