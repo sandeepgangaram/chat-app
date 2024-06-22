@@ -2,6 +2,31 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
+const getFilType = (file) => {
+  const mimeType = file.mimetype.split("/");
+  return mimeType[mimeType.length - 1];
+};
+
+const generateFileName = (req, file, cb) => {
+  const extension = getFilType(file);
+  const filename =
+    Date.now() + "-" + Math.round(Math.random() * 1e9) + "." + extension;
+
+  cb(null, file.fieldname + "-" + filename);
+};
+
+const fileFilter = (req, file, cb) => {
+  const extension = getFilType(file);
+  const allowedType = /jpeg|jpg|png/;
+  const isAllowed = allowedType.test(extension);
+
+  if (isAllowed) {
+    return cb(null, true);
+  }
+
+  return cb(null, false);
+};
+
 exports.userFile = ((req, res, next) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -70,28 +95,3 @@ exports.chatFile = ((req, res, next) => {
 
   return multer({ storage, fileFilter }).single("image");
 })();
-
-const getFilType = (file) => {
-  const mimeType = file.mimetype.split("/");
-  return mimeType[mimeType.length - 1];
-};
-
-const generateFileName = (req, file, cb) => {
-  const extension = getFilType(file);
-  const filename =
-    Date.now() + "-" + Math.round(Math.random() * 1e9) + "." + extension;
-
-  cb(null, file.fieldname + "-" + filename);
-};
-
-const fileFilter = (req, file, cb) => {
-  const extension = getFilType(file);
-  const allowedType = /jpeg|jpg|png/;
-  const isAllowed = allowedType.test(extension);
-
-  if (isAllowed) {
-    return cb(null, true);
-  }
-
-  return cb(null, false);
-};
