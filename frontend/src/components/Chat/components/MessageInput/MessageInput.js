@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import EmojiPicker from "emoji-picker-react";
 
 import "./MessageInput.scss";
 import chatServices from "../../../../services/chatService";
@@ -8,8 +9,10 @@ import chatServices from "../../../../services/chatService";
 const MessageInput = ({ chat }) => {
   const [message, setMessage] = useState("");
   const [image, setImage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const fileUploadRef = useRef();
+  const messageInputRef = useRef();
 
   const user = useSelector((state) => state.authReducer.user);
   const socket = useSelector((state) => state.chatReducer.socket);
@@ -54,6 +57,7 @@ const MessageInput = ({ chat }) => {
 
     setMessage("");
     setImage("");
+    setShowEmojiPicker(false);
 
     //send message with socket
     socket.emit("message", msg);
@@ -70,6 +74,22 @@ const MessageInput = ({ chat }) => {
         sendMessage(imageUrl);
       })
       .catch((e) => console.log(e));
+  };
+
+  const selectEmoji = ({ emoji }) => {
+    const startPostion = messageInputRef.current.selectionStart;
+    const endPostion = messageInputRef.current.selectionEnd;
+    const emojiLength = emoji.length;
+    const value = messageInputRef.current.value;
+
+    setMessage(
+      value.substring(0, startPostion) +
+        emoji +
+        value.substring(endPostion, value.length)
+    );
+
+    messageInputRef.current.focus();
+    messageInputRef.current.endPostion = endPostion + emojiLength;
   };
   return (
     <div id="input-container">
@@ -100,13 +120,18 @@ const MessageInput = ({ chat }) => {
       </div>
       <div id="message-input">
         <input
+          ref={messageInputRef}
           type="text"
           value={message}
           placeholder="Message..."
           onChange={(e) => handleMessage(e)}
           onKeyDown={(e) => handleKeyDown(e, false)}
         />
-        <FontAwesomeIcon icon={["far", "smile"]} className="fa-icon" />
+        <FontAwesomeIcon
+          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          icon={["far", "smile"]}
+          className="fa-icon"
+        />
       </div>
       <input
         id="chat-image"
@@ -114,6 +139,17 @@ const MessageInput = ({ chat }) => {
         type="file"
         onChange={(e) => setImage(e.target.files[0])}
       />
+      {showEmojiPicker ? (
+        <EmojiPicker
+          onEmojiClick={selectEmoji}
+          style={{ position: "absolute", bottom: "20px", right: "20px" }}
+        />
+      ) : // <Picker
+      //   // title="Pick your emoji..."
+      //   // emoji="point_up"
+      //   onEmojiSelect={selectEmoji}
+      // />
+      null}
     </div>
   );
 };
