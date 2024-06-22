@@ -31,6 +31,8 @@ const chatReducer = (state = initialState, action) => {
       return {
         ...state,
         currentChat: payload,
+        newMessage: { chatId: null, seen: null },
+        scrollBottom: state.scrollBottom + 1,
       };
     case SET_FRIENDS_ONLINE: {
       const updatedChats = state.chats.map((chat) => {
