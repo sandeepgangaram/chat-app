@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 
 const MessageBox = ({ chat }) => {
   const user = useSelector((state) => state.authReducer.user);
+  const senderTyping = useSelector((state) => state.chatReducer.senderTyping);
+
   const scrollBottom = useSelector((state) => state.chatReducer.scrollBottom);
 
   const msgBoxRef = useRef();
@@ -32,6 +34,16 @@ const MessageBox = ({ chat }) => {
           />
         );
       })}
+      {senderTyping.typing && senderTyping.chatId === chat.id ? (
+        <div className="message">
+          <div className="other-person">
+            <p className="m-0">
+              {senderTyping.fromUser.firstName} {senderTyping.fromUser.lastName}{" "}
+              is typing...
+            </p>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

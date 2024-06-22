@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import {
   fetchChats,
   receivedMessage,
+  senderTyping,
   setFriendOffline,
   setFriendOnline,
   setFriendsOnline,
@@ -41,6 +42,11 @@ function useSocket(user, dispatch) {
         socket.on("received", (message) => {
           dispatch(receivedMessage(message, user.id));
           console.log("received", message);
+        });
+
+        socket.on("typing", (sender) => {
+          dispatch(senderTyping(sender));
+          console.log("typing", sender);
         });
       })
       .catch((e) => console.log(e));

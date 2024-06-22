@@ -7,6 +7,7 @@ export const SET_FRIEND_ONLINE = "set_friend_online";
 export const SET_FRIEND_OFFLINE = "set_friend_offline";
 export const SET_SOCKET = "set_socket";
 export const RECEIVED_MESSAGE = "received_message";
+export const SENDER_TYPING = "sender_typing";
 
 export const fetchChats = () => (dispatch) => {
   return chatService
@@ -49,4 +50,8 @@ export const setSocket = (socket) => (dispatch) => {
 
 export const receivedMessage = (message, userId) => (dispatch) => {
   dispatch({ type: RECEIVED_MESSAGE, payload: { message, userId } });
+};
+
+export const senderTyping = (sender) => (dispatch) => {
+  dispatch({ type: SENDER_TYPING, payload: sender });
 };

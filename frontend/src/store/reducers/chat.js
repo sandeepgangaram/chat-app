@@ -1,11 +1,13 @@
 import {
   FETCH_CHATS,
   RECEIVED_MESSAGE,
+  SENDER_TYPING,
   SET_CURRENT_CHAT,
   SET_FRIENDS_ONLINE,
   SET_FRIEND_OFFLINE,
   SET_FRIEND_ONLINE,
   SET_SOCKET,
+  senderTyping,
 } from "../actions/chat";
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   socket: {},
   newMessage: { chatId: null, seen: null },
   scrollBottom: 0,
+  senderTyping: { typing: false },
 };
 
 const chatReducer = (state = initialState, action) => {
@@ -167,7 +170,22 @@ const chatReducer = (state = initialState, action) => {
         chats: chatsCopy,
         currentChat: currentChatCopy,
         newMessage,
-        scrollBottom,
+        scrollBottom, //TBR
+        senderTyping: { typing: false },
+      };
+    }
+
+    case SENDER_TYPING: {
+      let scrollBottomCopy = state.scrollBottom;
+
+      if (payload.isTyping) {
+        scrollBottomCopy = scrollBottomCopy + 1;
+      }
+
+      return {
+        ...state,
+        senderTyping: payload,
+        scrollBottom: scrollBottomCopy,
       };
     }
     default:
