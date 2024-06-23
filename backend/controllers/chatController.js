@@ -1,6 +1,6 @@
 const models = require("../models");
 const { sequelize } = require("../models");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 const User = models.User;
 const Chat = models.Chat;
