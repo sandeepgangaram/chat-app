@@ -8,6 +8,7 @@ import "./ChatHeader.scss";
 import chatServices from "../../../../services/chatService";
 
 const ChatHeader = ({ chat }) => {
+  console.log(chat);
   const [showChatOptions, setShowChatOptions] = useState(false);
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
   const [showLeaveChatModal, setShowLeaveChatModal] = useState(false);
@@ -38,6 +39,16 @@ const ChatHeader = ({ chat }) => {
       .catch((err) => console.log(err));
   };
 
+  const leaveGroup = () => {
+    chatServices
+      .leaveGroupChat(chat.id)
+      .then((data) => {
+        socket.emit("leave-group-chat", data);
+        setShowChatOptions(false);
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <Fragment>
       <div id="chatter">
@@ -66,7 +77,7 @@ const ChatHeader = ({ chat }) => {
             <p>Add user to chat</p>
           </div>
           {chat.type === "group" ? (
-            <div>
+            <div onClick={leaveGroup}>
               <FontAwesomeIcon
                 icon={["fas", "sign-out-alt"]}
                 className="fa-icon"

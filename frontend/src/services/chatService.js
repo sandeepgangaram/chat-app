@@ -72,6 +72,16 @@ const chatServices = {
         throw err;
       });
   },
+
+  leaveGroupChat: (chatId) => {
+    return API.post("/chats/leave-group-chat", { chatId })
+      .then(({ data }) => {
+        return data;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
 };
 
 export default chatServices;

@@ -251,7 +251,7 @@ exports.addUserToGroup = async (req, res) => {
     });
 
     if (chat.type === "dual") {
-      chat.type === "group";
+      chat.type = "group";
       await chat.save();
     }
 
