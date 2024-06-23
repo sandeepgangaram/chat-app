@@ -3,6 +3,7 @@ import {
   CREATE_CHAT,
   FETCH_CHATS,
   INCREMENT_SCROLL,
+  LEAVE_GROUP_CHAT,
   PAGINATE_MESSAGS,
   RECEIVED_MESSAGE,
   SENDER_TYPING,
@@ -238,38 +239,74 @@ const chatReducer = (state = initialState, action) => {
         chats: [...state.chats, payload],
       };
 
-    case ADD_USER_TO_GROUP:
-      {
-        const { chat, chatters } = payload;
+    case ADD_USER_TO_GROUP: {
+      const { chat, chatters } = payload;
 
-        let chatExists = false;
+      let chatExists = false;
 
-        const chatsCopy = state.chats.map((chatState) => {
-          if (chat.id === chatState.id) {
-            chatExists = true;
+      const chatsCopy = state.chats.map((chatState) => {
+        if (chat.id === chatState.id) {
+          chatExists = true;
+          return {
+            ...chatState,
+            type: chat.type,
+            Users: [...chatState.Users, ...chatters],
+          };
+        }
+        return chatState;
+      });
+
+      if (!chatExists) {
+        chatsCopy.push(chat);
+      }
+
+      let currentChatCopy = { ...state.currentChat };
+
+      if (Object.keys(currentChatCopy).length > 0) {
+        if (chat.id === currentChatCopy.id) {
+          currentChatCopy = {
+            ...currentChatCopy,
+            type: chat.type,
+            Users: [...currentChatCopy.Users, ...chatters],
+          };
+        }
+      }
+
+      return {
+        ...state,
+        chats: chatsCopy,
+        currentChat: currentChatCopy,
+      };
+    }
+
+    case LEAVE_GROUP_CHAT: {
+      const { chatId, userId, currentUserId } = payload;
+
+      if (userId === currentUserId) {
+        const chatsCopy = state.chats.filter((chat) => chat.id !== chatId);
+
+        return {
+          ...state,
+          chats: chatsCopy,
+          currentChat: state.currentChat.id === chatId ? {} : state.currentChat,
+        };
+      } else {
+        const chatsCopy = state.chats.map((chat) => {
+          if (chatId === chat.id) {
             return {
-              ...chatState,
-              type: chat.type,
-              Users: [...chatState.Users, ...chatters],
+              ...chat,
+              Users: chat.Users.filter((user) => user.id !== userId),
             };
           }
-          return chatState;
+          return chat;
         });
 
-        if (!chatExists) {
-          chatsCopy.push(chat);
-        }
-
         let currentChatCopy = { ...state.currentChat };
-
-        if (Object.keys(currentChatCopy).length > 0) {
-          if (chat.id === currentChatCopy.id) {
-            currentChatCopy = {
-              ...currentChatCopy,
-              type: chat.type,
-              Users: [...currentChatCopy.Users, ...chatters],
-            };
-          }
+        if (currentChatCopy.id === chatId) {
+          currentChatCopy = {
+            ...currentChatCopy,
+            Users: currentChatCopy.Users.filter((user) => user.id !== userId),
+          };
         }
 
         return {
@@ -278,7 +315,7 @@ const chatReducer = (state = initialState, action) => {
           currentChat: currentChatCopy,
         };
       }
-      break;
+    }
     default:
       return state;
   }

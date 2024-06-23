@@ -8,7 +8,6 @@ import "./ChatHeader.scss";
 import chatServices from "../../../../services/chatService";
 
 const ChatHeader = ({ chat }) => {
-  console.log(chat);
   const [showChatOptions, setShowChatOptions] = useState(false);
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
   const [showLeaveChatModal, setShowLeaveChatModal] = useState(false);
@@ -43,7 +42,7 @@ const ChatHeader = ({ chat }) => {
     chatServices
       .leaveGroupChat(chat.id)
       .then((data) => {
-        socket.emit("leave-group-chat", data);
+        socket.emit("leave-current-chat", data);
         setShowChatOptions(false);
       })
       .catch((e) => console.log(e));

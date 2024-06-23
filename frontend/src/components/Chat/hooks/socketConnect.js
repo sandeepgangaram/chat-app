@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import {
   createChat,
   fetchChats,
+  leaveGroupChat,
   receivedMessage,
   senderTyping,
   setFriendOffline,
@@ -59,7 +60,14 @@ function useSocket(user, dispatch) {
           dispatch(addUserToGroup(group));
           console.log("added-user-to-group", group);
         });
+
+        socket.on("remove-user-from-chat", (data) => {
+          data.currentUserId = user.id;
+          dispatch(leaveGroupChat(data));
+          console.log("remove-user-from-chat", data);
+        });
       })
+
       .catch((e) => console.log(e));
   }, [dispatch, user]);
 }
