@@ -185,16 +185,26 @@ exports.messages = async (req, res) => {
 
 exports.deleteChat = async (req, res) => {
   try {
-    await Chat.destroy({
+    const { chatId } = req.params;
+
+    const chat = await Chat.findOne({
       where: {
-        id: req.params.id,
+        id: chatId,
       },
+      include: [
+        {
+          model: User,
+        },
+      ],
     });
 
-    return res.json({
-      status: "Success",
-      message: "Chat deleted successfully",
-    });
+    if (chat.type === "dual") {
+      await chat.destroy();
+    }
+
+    const notifyUsers = chat.Users.map((user) => user.id);
+
+    return res.json({ chatId, notifyUsers });
   } catch (error) {
     return res.status(500).json({ status: "Error", message: error.message });
   }

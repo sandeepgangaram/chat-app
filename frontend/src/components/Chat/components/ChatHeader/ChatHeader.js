@@ -48,6 +48,15 @@ const ChatHeader = ({ chat }) => {
       .catch((e) => console.log(e));
   };
 
+  const deleteChatHandler = () => {
+    chatServices
+      .deleteChat(chat.id)
+      .then((data) => {
+        socket.emit("delete-chat", data);
+        setShowChatOptions(false);
+      })
+      .catch((e) => console.log(e));
+  };
   return (
     <Fragment>
       <div id="chatter">
@@ -84,10 +93,12 @@ const ChatHeader = ({ chat }) => {
               <p>Leave chat</p>
             </div>
           ) : null}
-          <div>
-            <FontAwesomeIcon icon={["fas", "trash"]} className="fa-icon" />
-            <p>Delete chat</p>
-          </div>
+          {chat.type === "dual" ? (
+            <div onClick={deleteChatHandler}>
+              <FontAwesomeIcon icon={["fas", "trash"]} className="fa-icon" />
+              <p>Delete chat</p>
+            </div>
+          ) : null}
         </div>
       ) : null}
       {showAddFriendModal ? (

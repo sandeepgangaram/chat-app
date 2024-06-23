@@ -17,6 +17,6 @@ router.post("/create", [auth], create);
 router.post("/add-user-to-group", [auth], addUserToGroup);
 router.post("/leave-group-chat", [auth], leaveGroupChat);
 router.post("/upload-image", [auth, chatFile], imageUpload);
-router.delete("/:id", [auth], deleteChat);
+router.delete("/:chatId", [auth], deleteChat);
 
 module.exports = router;

@@ -12,7 +12,7 @@ import {
   SET_FRIEND_OFFLINE,
   SET_FRIEND_ONLINE,
   SET_SOCKET,
-  senderTyping,
+  DELETE_CURRENT_CHAT,
 } from "../actions/chat";
 
 const initialState = {
@@ -315,6 +315,15 @@ const chatReducer = (state = initialState, action) => {
           currentChat: currentChatCopy,
         };
       }
+    }
+    case DELETE_CURRENT_CHAT: {
+      const chatId = payload;
+
+      return {
+        ...state,
+        chats: state.chats.filter((chat) => chat.id !== chatId),
+        currentChat: state.currentChat.id === chatId ? {} : state.currentChat,
+      };
     }
     default:
       return state;

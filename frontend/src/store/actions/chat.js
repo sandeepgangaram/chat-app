@@ -13,6 +13,7 @@ export const INCREMENT_SCROLL = "increment_scroll";
 export const CREATE_CHAT = "create_chat";
 export const ADD_USER_TO_GROUP = "add_user_to_group";
 export const LEAVE_GROUP_CHAT = "leave_group_chat";
+export const DELETE_CURRENT_CHAT = "delete_current_chat";
 
 export const fetchChats = () => (dispatch) => {
   return chatService
@@ -92,4 +93,8 @@ export const addUserToGroup = (group) => (dispatch) => {
 
 export const leaveGroupChat = (data) => (dispatch) => {
   dispatch({ type: LEAVE_GROUP_CHAT, payload: data });
+};
+
+export const deleteCurrentChat = (chatId) => (dispatch) => {
+  dispatch({ type: DELETE_CURRENT_CHAT, payload: chatId });
 };

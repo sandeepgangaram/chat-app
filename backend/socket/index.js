@@ -210,6 +210,18 @@ const SocketServer = (server) => {
         }
       });
     });
+
+    socket.on("delete-chat", (data) => {
+      const { chatId, notifyUsers } = data;
+
+      notifyUsers.forEach((userId) => {
+        if (users.has(userId)) {
+          users.get(userId).sockets.forEach((socket) => {
+            io.to(socket).emit("delete-chat", parseInt(chatId));
+          });
+        }
+      });
+    });
   });
 };
 

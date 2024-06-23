@@ -82,6 +82,16 @@ const chatServices = {
         throw err;
       });
   },
+
+  deleteChat: (chatId) => {
+    return API.delete(`/chats/${chatId}`)
+      .then(({ data }) => {
+        return data;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
 };
 
 export default chatServices;

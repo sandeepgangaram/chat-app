@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { io } from "socket.io-client";
 import {
   createChat,
+  deleteCurrentChat,
   fetchChats,
   leaveGroupChat,
   receivedMessage,
@@ -65,6 +66,11 @@ function useSocket(user, dispatch) {
           data.currentUserId = user.id;
           dispatch(leaveGroupChat(data));
           console.log("remove-user-from-chat", data);
+        });
+
+        socket.on("delete-chat", (chatId) => {
+          dispatch(deleteCurrentChat(chatId));
+          console.log("delete-current-chat", chatId);
         });
       })
 
