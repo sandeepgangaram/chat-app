@@ -10,7 +10,7 @@ import {
   setFriendsOnline,
   setSocket,
 } from "../../../store/actions/chat";
-
+import { addUserToGroup } from "../../../store/actions/chat";
 function useSocket(user, dispatch) {
   useEffect(() => {
     dispatch(fetchChats())
@@ -53,6 +53,11 @@ function useSocket(user, dispatch) {
         socket.on("new-chat", (chat) => {
           dispatch(createChat(chat));
           console.log("new-chat", chat);
+        });
+
+        socket.on("added-user-to-group", (group) => {
+          dispatch(addUserToGroup(group));
+          console.log("added-user-to-group", group);
         });
       })
       .catch((e) => console.log(e));

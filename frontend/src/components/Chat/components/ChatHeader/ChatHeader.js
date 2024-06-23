@@ -1,13 +1,43 @@
 import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./ChatHeader.scss";
+
+import Modal from "../../../Modal/Modal";
 import { userStatus } from "../../../../utils/helpers";
+import "./ChatHeader.scss";
+import chatServices from "../../../../services/chatService";
 
 const ChatHeader = ({ chat }) => {
   const [showChatOptions, setShowChatOptions] = useState(false);
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
   const [showLeaveChatModal, setShowLeaveChatModal] = useState(false);
   const [showDeleteChatModal, setShowDeleteChatModal] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const socket = useSelector((state) => state.chatReducer.socket);
+
+  const searchFriends = (e) => {
+    chatServices
+      .searchUsers(e.target.value)
+      .then((res) => {
+        setSuggestions(res);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+  const addNewFriend = (id) => {
+    chatServices
+      .addFriendToGroupChat(id, chat.id)
+      .then((data) => {
+        socket.emit("add-user-to-group", data);
+        setShowAddFriendModal(false);
+        setShowChatOptions(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Fragment>
       <div id="chatter">
@@ -31,7 +61,7 @@ const ChatHeader = ({ chat }) => {
       />
       {showChatOptions ? (
         <div id="settings">
-          <div>
+          <div onClick={() => setShowAddFriendModal(true)}>
             <FontAwesomeIcon icon={["fas", "user-plus"]} className="fa-icon" />
             <p>Add user to chat</p>
           </div>
@@ -49,6 +79,33 @@ const ChatHeader = ({ chat }) => {
             <p>Delete chat</p>
           </div>
         </div>
+      ) : null}
+      {showAddFriendModal ? (
+        <Modal onClick={() => setShowAddFriendModal(false)}>
+          <Fragment key="header">
+            <h3 className="m-0">Add friend to group chat</h3>
+          </Fragment>
+          <Fragment key="body">
+            <p>Find friends by typing their name below</p>
+            <input
+              onInput={searchFriends}
+              type="text"
+              placeholder="Search..."
+            />
+            <div id="suggestions">
+              {suggestions.map((user) => {
+                return (
+                  <div key={user.id} className="suggestion">
+                    <p>
+                      {user.firstName} {user.lastName}
+                    </p>
+                    <button onClick={() => addNewFriend(user.id)}>ADD</button>
+                  </div>
+                );
+              })}
+            </div>
+          </Fragment>
+        </Modal>
       ) : null}
     </Fragment>
   );

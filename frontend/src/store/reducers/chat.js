@@ -1,4 +1,5 @@
 import {
+  ADD_USER_TO_GROUP,
   CREATE_CHAT,
   FETCH_CHATS,
   INCREMENT_SCROLL,
@@ -237,6 +238,45 @@ const chatReducer = (state = initialState, action) => {
         chats: [...state.chats, payload],
       };
 
+    case ADD_USER_TO_GROUP:
+      {
+        const { chat, chatters } = payload;
+
+        let chatExists = false;
+
+        const chatsCopy = state.chats.map((chatState) => {
+          if (chat.id === chatState.id) {
+            chatExists = true;
+            return {
+              ...chatState,
+              Users: [...chatState.Users, ...chatters],
+            };
+          }
+          return chatState;
+        });
+
+        if (!chatExists) {
+          chatsCopy.push(chat);
+        }
+
+        let currentChatCopy = { ...state.currentChat };
+
+        if (Object.keys(currentChatCopy).length > 0) {
+          if (chat.id === currentChatCopy.id) {
+            currentChatCopy = {
+              ...currentChatCopy,
+              Users: [...currentChatCopy.Users, ...chatters],
+            };
+          }
+        }
+
+        return {
+          ...state,
+          chats: chatsCopy,
+          currentChat: currentChatCopy,
+        };
+      }
+      break;
     default:
       return state;
   }
