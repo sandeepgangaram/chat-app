@@ -138,6 +138,27 @@ const SocketServer = (server) => {
         }
       });
     });
+
+    socket.on("add-friend", (chats) => {
+      try {
+        let status = "offline";
+
+        if (users.has(chats[1].Users[0].id)) {
+          status = "online";
+          chats[0].Users[0].status = "online";
+          users.get(chats[1].Users[0].id).sockets.forEach((socket) => {
+            io.to(socket).emit("new-chat", chats[0]);
+          });
+        }
+
+        if (users.has(chats[0].Users[0].id)) {
+          chats[1].Users[0].status = status;
+          users.get(chats[0].Users[0].id).sockets.forEach((socket) => {
+            io.to(socket).emit("new-chat", chats[1]);
+          });
+        }
+      } catch (error) {}
+    });
   });
 };
 

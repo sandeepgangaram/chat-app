@@ -8,9 +8,10 @@ import chatServices from "../../../../services/chatService";
 
 const FriendList = () => {
   const chats = useSelector((state) => state.chatReducer.chats);
+  const socket = useSelector((state) => state.chatReducer.socket);
   const dispatch = useDispatch();
 
-  const [showFriendsModal, setShowFrindsModal] = useState(false);
+  const [showFriendsModal, setShowFriendsModal] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
   const openChat = (chat) => {
@@ -28,13 +29,21 @@ const FriendList = () => {
       });
   };
 
-  const addNewFriend = () => {};
-  //dispatch;
+  const addNewFriend = (id) => {
+    chatServices
+      .createChat(id)
+      .then((chats) => {
+        socket.emit("add-friend", chats);
+        setShowFriendsModal(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div id="friends">
       <div id="title">
         <h3 className="m-0">Friends</h3>
-        <button onClick={() => setShowFrindsModal(true)}>ADD</button>
+        <button onClick={() => setShowFriendsModal(true)}>ADD</button>
       </div>
       <hr />
       <div id="friends-box">
@@ -49,7 +58,7 @@ const FriendList = () => {
         )}
       </div>
       {showFriendsModal ? (
-        <Modal click={() => setShowFrindsModal(false)}>
+        <Modal onClick={() => setShowFriendsModal(false)}>
           <Fragment key="header">
             <h3 className="m-0">Create new chat</h3>
           </Fragment>

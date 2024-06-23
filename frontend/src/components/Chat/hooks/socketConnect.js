@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 import {
+  createChat,
   fetchChats,
   receivedMessage,
   senderTyping,
@@ -47,6 +48,11 @@ function useSocket(user, dispatch) {
         socket.on("typing", (sender) => {
           dispatch(senderTyping(sender));
           console.log("typing", sender);
+        });
+
+        socket.on("new-chat", (chat) => {
+          dispatch(createChat(chat));
+          console.log("new-chat", chat);
         });
       })
       .catch((e) => console.log(e));

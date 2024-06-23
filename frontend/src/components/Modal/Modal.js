@@ -18,7 +18,7 @@ const Modal = (props) => {
           <div className="modal-header">{findByKey("header")}</div>
           <div className="modal-body">{findByKey("body")}</div>
           <div className="modal-footer">
-            <button className="modal-close" ReonClick={clickHandler}>
+            <button className="modal-close" onClick={clickHandler}>
               Close
             </button>
             {findByKey("footer")}

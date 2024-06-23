@@ -1,4 +1,5 @@
 import {
+  CREATE_CHAT,
   FETCH_CHATS,
   INCREMENT_SCROLL,
   PAGINATE_MESSAGS,
@@ -229,6 +230,13 @@ const chatReducer = (state = initialState, action) => {
         scrollBottom: state.scrollBottom + 1,
         newMessage: { chatId: null, seen: true },
       };
+
+    case CREATE_CHAT:
+      return {
+        ...state,
+        chats: [...state.chats, payload],
+      };
+
     default:
       return state;
   }

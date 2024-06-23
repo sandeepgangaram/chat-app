@@ -10,6 +10,7 @@ export const RECEIVED_MESSAGE = "received_message";
 export const SENDER_TYPING = "sender_typing";
 export const PAGINATE_MESSAGS = "paginate_messages";
 export const INCREMENT_SCROLL = "increment_scroll";
+export const CREATE_CHAT = "create_chat";
 
 export const fetchChats = () => (dispatch) => {
   return chatService
@@ -77,4 +78,8 @@ export const paginateMessages = (id, page) => (dispatch) => {
 
 export const incrementScroll = () => (dispatch) => {
   dispatch({ type: INCREMENT_SCROLL });
+};
+
+export const createChat = (chat) => (dispatch) => {
+  dispatch({ type: CREATE_CHAT, payload: chat });
 };
