@@ -249,6 +249,7 @@ const chatReducer = (state = initialState, action) => {
             chatExists = true;
             return {
               ...chatState,
+              type: chat.type,
               Users: [...chatState.Users, ...chatters],
             };
           }
@@ -265,6 +266,7 @@ const chatReducer = (state = initialState, action) => {
           if (chat.id === currentChatCopy.id) {
             currentChatCopy = {
               ...currentChatCopy,
+              type: chat.type,
               Users: [...currentChatCopy.Users, ...chatters],
             };
           }
